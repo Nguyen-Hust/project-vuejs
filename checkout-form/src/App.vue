@@ -1,15 +1,13 @@
 <template>
   <div class="app">
-    <cart></cart>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Cart from './components/Cart/Cart.vue'
+
 export default {
-  components:{
-    Cart
-  }
+  
 }
 </script>
 

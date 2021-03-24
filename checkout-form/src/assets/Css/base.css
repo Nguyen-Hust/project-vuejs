@@ -4,7 +4,6 @@
     border: 0;
     outline: none;
     box-sizing: border-box;
-    line-height: 20px;
 }
 
 html {
@@ -18,4 +17,9 @@ ul {
 img{
     width: 100%;
     height: auto;
+}
+
+hr{
+    height: 1.5px;
+    background-color: lightgrey;
 }

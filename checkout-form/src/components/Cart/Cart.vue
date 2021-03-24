@@ -1,19 +1,23 @@
 <template>
     <div class="cart">
         <cart-detail></cart-detail>
+        <cart-wrapper></cart-wrapper>
     </div>
 </template>
 <script>
 import CartDetail from './CartDetail.vue'
+import CartWrapper from './CartWrapper.vue'
 export default {
   components:{
-      CartDetail
-  }  
+      CartDetail,
+      CartWrapper
+  }
 }
 </script>
-<style>
+<style scoped>
     .cart{
         display: grid;
-        grid-template-columns: 66.67% 33.33%;
+        grid-template-columns: 70% 30%;
+        grid-column-gap: 10px;
     }
 </style>

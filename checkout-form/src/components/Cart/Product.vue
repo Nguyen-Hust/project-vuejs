@@ -4,7 +4,7 @@
             <img :src="Link" alt="YEEZY-BOOST-380-ADULTS">
         </div>
         <div class="product-info">
-            <h3 class="product-name">{{product.name}}</h3>{{this.product.amount}}
+            <h3 class="product-name">{{product.name}}</h3>
             <p v-if="product.gender == 1" class="product-gender">Giới tính: Nam</p>
             <p v-else-if="product.gender == 0" class="product-gender">Giới tính: Nữ</p>
             <p class="product-color">Màu: {{product.color}} </p>
@@ -30,7 +30,7 @@
                 </svg>
             </div>
             <p class="product-price">
-                ₫{{this.product.price}}
+                ₫{{Price}}
             </p>
         </div>
         <button class="product-delete" @click="Delete">X</button>
@@ -51,15 +51,19 @@ export default {
     computed: {
         Link(){
             let link = this.product.name.split(" ").join("-")
-            return `/dist/${link}.jpg`
+            return require(`../../assets/Image/${link}.jpg`)
         },
         Amount: {
             get(){
                 return this.$store.state.Products[this.index].amount
             }, 
             set(count){
-                this.$store.commit("UpdateCount", [this.index, count])
+                this.$store.commit("UpdateAmount", [this.index, count])
             }
+        },
+        Price(){
+            let total = this.$store.state.Products[this.index].amount * this.product.price 
+            return total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
         }
     },
     methods:{
@@ -77,6 +81,7 @@ export default {
         padding: 1.6rem;
         font-size: 1.4rem;
         grid-column-gap: 10px;
+        line-height: 20px;
     }
     .product-name{
         font-size: 1.6rem;
