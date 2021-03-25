@@ -1,46 +1,41 @@
 <template lang="">
-    <div class="container">
-  <div class="title">
-    <h2 class="title-active">(1) Địa chỉ giao hàng</h2>
-    <h2 class="title-disabled">(2) Xem lại & thanh toán</h2>
-  </div>
   <div class="d-flex">
     <form action="" method="">
       <label>
         <span class="fname">Tên <span class="required">*</span></span>
-        <input type="text" placeholder="Nhập tên của bạn" >
+        <input type="text" v-model="user.firstName" required placeholder="Nhập tên của bạn" >
       </label>
       <label>
         <span class="lname">Họ <span class="required">*</span></span>
-        <input type="text" placeholder="Nhập họ của bạn">
+        <input type="text" v-model="user.lastName" required placeholder="Nhập họ của bạn">
       </label>
       <label>
         <span>Địa chỉ <span class="required">*</span></span>
-        <input type="text" placeholder="Nhập địa chỉ nhà bạn" required>
+        <input type="text" v-model="user.address" required placeholder="Nhập địa chỉ nhà bạn">
       </label>
       <label>
         <span>Phường <span class="required">*</span></span>
-        <input type="text"  placeholder="Nhập phường của bạn">
+        <input type="text" v-model="user.ward" required  placeholder="Nhập phường của bạn">
       </label>
       <label>
         <span>Quận/ Huyện<span class="required">*</span></span>
-        <input type="text" placeholder="Nhập quận/ huyện của bạn" required>
+        <input type="text" v-model="user.district" required placeholder="Nhập quận/ huyện của bạn">
       </label>
       <label>
         <span>Thành Phố <span class="required">*</span></span>
-        <input type="text" placeholder="Nhập thành phố của bạn" required>
+        <input type="text" v-model="user.city" required placeholder="Nhập thành phố của bạn" >
       </label>
       <label>
         <span>Postcode / ZIP <span class="required">*</span></span>
-        <input type="text" placeholder="Nhập mã zip">
+        <input type="text" v-model="user.postCode" required placeholder="Nhập mã zip">
       </label>
       <label>
         <span>Số điện thoại <span class="required">*</span></span>
-        <input type="tel" placeholder="Nhập số điện của bạn">
+        <input type="tel" v-model="user.phoneNumber" required placeholder="Nhập số điện của bạn">
       </label>
       <label>
         <span>Địa chỉ Email <span class="required">*</span></span>
-        <input type="email" placeholder="Nhập email của bạn">
+        <input type="email" v-model="user.email" required placeholder="Nhập email của bạn">
       </label>
     </form>
     <div class="Yorder">
@@ -68,38 +63,61 @@
           <td>Tổng tiền</td>
           <td>₫{{GetToTal}}</td>
         </tr>
-        
       </table><br>
-      <button type="button">Place Order</button>
+      <button type="button" @click="Submit">Thanh toán</button>
+      <p class="message">{{message}}</p>
     </div><!-- Yorder -->
   </div>
-</div>
 </template>
 <script>
 import {mapGetters} from 'vuex'
 export default {
+    data() {
+      return {
+        user:{
+          firstName:this.$store.state.user.firstName,
+          lastName:this.$store.state.user.lastName,
+          address:this.$store.state.user.address,
+          ward:this.$store.state.user.ward,
+          district:this.$store.state.user.district,
+          city:this.$store.state.user.city,
+          postCode: this.$store.state.user.postCode,
+          phoneNumber:this.$store.state.user.phoneNumber,
+          email:this.$store.state.user.email
+        },
+        message:""
+      }
+    },
     computed:{
       ...mapGetters(["GetProductInfo","GetToTalProduct","GetToTal", "GetFilter"])
+    },
+    methods:{
+      Submit(){
+        for (const property in this.user) {
+          if(this.user[property].trim() == ""){
+            this.message = "Kiểm tra lại nội dung nhập"
+            return
+          }
+        }
+        if(!(/^-?[\d.]+(?:e-?\d+)?$/.test(this.user.phoneNumber))||this.user.phoneNumber.length != 10){
+          this.message = "Kiểm tra lại số điện thoại nhập"
+          return
+        }
+        if(!(/^-?[\d.]+(?:e-?\d+)?$/.test(this.user.postCode))||this.user.postCode.length != 7){
+          this.message = "Kiểm tra lại postcode nhập"
+          return
+        }
+        if (!(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(this.user.email))){
+          this.message = "Kiểm tra lại email nhập"
+          return
+        }
+        this.$store.commit("UpdateUser", this.user)
+        this.$router.push("/form/confirm")
+      }
     }
 }
 </script>
 <style scoped>
-    @import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700');
-
-.container{
-  font-size: 16px;
-  width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
-  margin-right: auto;
-  margin-left: auto;
-}
-@media (min-width: 1200px)
-{
-  .container{
-    max-width: 1140px;
-  }
-}
 .d-flex{
   display: flex;
   flex-direction: row;
@@ -113,23 +131,6 @@ form{
 .Yorder{
   flex: 2;
 }
-.title{
-  display: flex;
-  border-radius:5px 5px 0 0 ;
-}
-.title-active{
-  cursor: pointer;
-  padding: 20px;
-  border-bottom: 1px solid black;
-}
-.title-disabled{
-  color: #D9D9D9;
-  padding: 20px;
-}
-h2{
-  margin: 0;
-  padding-left: 15px; 
-}
 .required{
   color: red;
 }
@@ -138,12 +139,12 @@ label, table{
   margin: 15px;
 }
 label>span{
-  float: left;
   width: 25%;
+  display:inline-block;
   margin-top: 12px;
   padding-right: 10px;
 }
-input[type="text"], input[type="tel"], input[type="email"], select
+input[type="text"], input[type="tel"], input[type="email"]
 {
   width: 70%;
   height: 30px;
@@ -151,12 +152,6 @@ input[type="text"], input[type="tel"], input[type="email"], select
   margin-bottom: 10px;
   border: 1px solid #dadada;
   color: #888;
-}
-select{
-  width: 72%;
-  height: 45px;
-  padding: 5px 10px;
-  margin-bottom: 10px;
 }
 .Yorder{
   margin-top: 15px;
@@ -202,5 +197,11 @@ button{
 button:hover{
   cursor: pointer;
   background: #428a7d;
+}
+
+.message{
+  color:red;
+  margin:0;
+  text-align: center;
 }
 </style>

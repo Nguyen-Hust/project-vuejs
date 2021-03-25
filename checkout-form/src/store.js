@@ -29,7 +29,18 @@ export const store = new VueX.Store({
       ],
       Filter: {
         isPromotion: false,
-      }
+      },
+      user:{
+        firstName:"",
+        lastName:"",
+        address:"",
+        ward:"",
+        district:"",
+        city:"",
+        postCode: "",
+        phoneNumber:"",
+        email:""
+      },
     },
     getters:{
       GetProducts: state=>{
@@ -63,6 +74,9 @@ export const store = new VueX.Store({
         if(state.Filter.isPromotion)
             total*=0.75
         return total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+      },
+      GetUser:state=>{
+        return state.user
       }
     },
     mutations:{
@@ -73,7 +87,10 @@ export const store = new VueX.Store({
         state.Products[params[0]].amount = params[1]
       },
       UpdatePromotion(state, isPromotion){
-          state.Filter.isPromotion = isPromotion
+        state.Filter.isPromotion = isPromotion
+      },
+      UpdateUser(state, user){
+        state.user = user
       }
     }
   })

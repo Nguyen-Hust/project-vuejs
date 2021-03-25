@@ -73,7 +73,7 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
     .product{
         position: relative;
         display: grid;
