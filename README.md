@@ -1,1 +1,1 @@
-These are my projects vuejs
+These are my projects vuejs. I don't have Responsive Web Design
